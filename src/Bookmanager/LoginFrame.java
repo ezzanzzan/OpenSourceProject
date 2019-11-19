@@ -85,6 +85,7 @@ public class LoginFrame extends JFrame{
 		// √π Ω√¿€
 		new LoginFrame();	
 	
+		// example
 	}
 
 
