@@ -2,13 +2,14 @@
 
 package Bookmanager;
 
-public class JoinBean {
+
+public class Join_Bean {
 	private String id;		// 학번
 	private String name;	// 이름
 	private String pw;		// 비밀번호
 	private String phone;	// 전화번호
 	
-	public JoinBean(String id, String name, String pw, String phone) {	// 생성자
+	public Join_Bean(String id, String name, String pw, String phone) {	// 생성자
 		this.id=id;
 		this.name=name;
 		this.pw=pw;
