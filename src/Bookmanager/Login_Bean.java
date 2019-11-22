@@ -2,11 +2,11 @@
 
 package Bookmanager;
 
-public class LoginBean {
+public class Login_Bean {
 	private String id;
 	private String pw;
 	
-	public LoginBean(String id, String pw) {
+	public Login_Bean(String id, String pw) {
 		this.id=id;
 		this.pw=pw;
 	}

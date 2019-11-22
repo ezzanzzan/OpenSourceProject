@@ -1,4 +1,4 @@
-// 로그인 시 입력된 학번과 비밀번호로 DB 연동 검색
+// 회원가입 시 입력된 정보를 DB에 저장
 
 package Bookmanager;
 
@@ -10,38 +10,30 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-public class LoginDAO {
+public class Join_DAO {
 	private Statement stmt = null;
-	private int result=0;
-
-	public LoginDAO(LoginBean inform) {
-
+	private ResultSet rs = null;
+	private int r = 0;
+	
+	public Join_DAO(Join_Bean inform) {
+			
 		Connection conn = null;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
 
-			String qu="select * from test1_1";
 			stmt = (Statement) conn.createStatement();
-			ResultSet rs=stmt.executeQuery(qu);
+			r = stmt.executeUpdate("insert into test1_1 " +
+					"(id,pw,name,phone) value ('" +
+					inform.getId() + "','" + inform.getPw() + "','" + inform.getName() +"','" +inform.getPhone()+ "')" );
 
-			while(rs.next()) {
-
-				String id=rs.getString("id");
-				String pw=rs.getString("pw");
-
-				if(id.equals(inform.getId())&&pw.equals(inform.getPw())) {
-					JOptionPane.showMessageDialog(null,"로그인이 완료되었습니다.");
-					result=1;
-					break;
-				}
+			if( r == 1 )
+			{
+				JOptionPane.showMessageDialog(null,"회원가입이 완료되었습니다.");
+			}else{
+				JOptionPane.showMessageDialog(null,"회원가입이 실패되었습니다.");
 			}
-
-			// 로그인 시 학번과 비밀번호가 일치하지 않을 때
-			if(result==0)
-				JOptionPane.showMessageDialog(null,"학번이나 비밀번호를 잘못 입력하셨습니다.");
-
 
 		}
 		catch(ClassNotFoundException cnfe){
@@ -59,5 +51,6 @@ public class LoginDAO {
 		catch(SQLException ee){
 			System.out.println(ee.getMessage());
 		}
+		
 	}
 }
