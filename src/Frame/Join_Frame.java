@@ -1,6 +1,7 @@
-package Bookmanager;
+package Frame;
 
-import Bookmanager.*;
+import Bean.*;
+import DB.*;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -116,8 +117,8 @@ public class Join_Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				// 입력된 정보 DB와 연결
-				Join_Bean joinbean=new Join_Bean(id.getText(),name.getText(),pw.getText(),phone.getText());
-				new Join_DAO(joinbean);
+				Member joinbean=new Member(id.getText(),name.getText(),pw.getText(),phone.getText(),"","","");
+				new Join_DB(joinbean);
 				
 				setVisible(false);		
 			}
