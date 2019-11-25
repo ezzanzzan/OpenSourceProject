@@ -1,6 +1,6 @@
-package Bookmanager;
+package Frame;
 
-import Bookmanager.*;
+import DB.*;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -21,6 +21,7 @@ public class Login_Frame extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+	
 				try {
 					Login_Frame frame = new Login_Frame();
 					frame.setVisible(true);
@@ -35,11 +36,12 @@ public class Login_Frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
 	public Login_Frame() {
 		setTitle("전공책 대여 사업 프로그램");
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		setSize(400,300);					
 		setLocationRelativeTo(null);		
 		setResizable(false);	
@@ -47,7 +49,7 @@ public class Login_Frame extends JFrame {
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(null);
-		
+
 		JLabel Title=new JLabel("◆◇ DRAG 전공책 대여 사업 프로그램입니다 ◇◆");
 		Title.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 13));
 		Title.setBounds(58,40,1000,25);
@@ -84,17 +86,16 @@ public class Login_Frame extends JFrame {
 		login_B.setBounds(130,170,70,30);		
 		panel.add(login_B);
 
+		// 학생으로 로그인
 		login_B.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Login_Bean loginbean = new Login_Bean(id.getText(),pw.getText());
-				new Login_DAO(loginbean);
+				new Login_DB(id.getText(),pw.getText());
 				
 				setVisible(false);	
-
-				
 			}
 		});
+
 
 		// join button 생성 & 클릭 이벤트 발생 시
 		JButton join_B = new JButton("JOIN");	
@@ -110,6 +111,6 @@ public class Login_Frame extends JFrame {
 		});
 
 		setContentPane(panel);
-	}
 
+	}
 }

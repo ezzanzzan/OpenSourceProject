@@ -1,6 +1,6 @@
 // 로그인 시 입력된 학번과 비밀번호로 DB 연동 검색
 
-package Bookmanager;
+package DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,37 +10,44 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-public class Login_DAO {
-	private Statement stmt = null;
-	private int result=0;
+import Bean.*;
+import Frame.*;
 
-	public Login_DAO(Login_Bean inform) {
+public class Login_DB {
+	private Statement stmt = null;
+
+	public Login_DB(String loginid, String loginpw) {
 
 		Connection conn = null;
+		Statement stmt = null;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
-
-			String qu="select * from test1_1";
 			stmt = (Statement) conn.createStatement();
-			ResultSet rs=stmt.executeQuery(qu);
+
+			stmt.executeUpdate("update test1_1 set login = null ");
+
+			ResultSet rs=stmt.executeQuery("select pw from test1_1 where id = '"+loginid+"';");
+
+			String pw=null;
 
 			while(rs.next()) {
+				pw=rs.getString("pw");
+			}
 
-				String id=rs.getString("id");
-				String pw=rs.getString("pw");
+			if(pw.equals(loginpw)) {
 
-				if(id.equals(inform.getId())&&pw.equals(inform.getPw())) {
-					JOptionPane.showMessageDialog(null,"로그인이 완료되었습니다.");
-					result=1;
+				JOptionPane.showMessageDialog(null,"로그인이 완료되었습니다.");
 
-					break;
-				}
+				// 로그인 한 아이디 확인
+				stmt.executeUpdate("update test1_1 set login='login' where id='" + loginid +"'" );
+
+				new Book_Frame();
 			}
 
 			// 로그인 시 학번과 비밀번호가 일치하지 않을 때
-			if(result==0)
+			else
 				JOptionPane.showMessageDialog(null,"학번이나 비밀번호를 잘못 입력하셨습니다.");
 
 
@@ -60,5 +67,7 @@ public class Login_DAO {
 		catch(SQLException ee){
 			System.out.println(ee.getMessage());
 		}
+
+
 	}
 }

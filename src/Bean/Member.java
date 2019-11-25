@@ -1,19 +1,29 @@
 // 회원가입 생성자
 
-package Bookmanager;
+package Bean;
 
+import java.util.ArrayList;
 
-public class Join_Bean {
+public class Member {
 	private String id;		// 학번
 	private String name;	// 이름
 	private String pw;		// 비밀번호
 	private String phone;	// 전화번호
+	public String login;		// 로그인 선택
 	
-	public Join_Bean(String id, String name, String pw, String phone) {	// 생성자
+	public String rentBook[]=new String[3];
+	
+	public static ArrayList<Member> list = new ArrayList<Member>();
+	
+	public Member(String id, String name, String pw, String phone,String rent1, String rent2, String rent3) {	// 생성자
 		this.id=id;
 		this.name=name;
 		this.pw=pw;
 		this.phone=phone;
+		rentBook[0]=rent1;
+		rentBook[1]=rent2;
+		rentBook[2]=rent3;
+		login=null;
 	}
 	
 	public String getId() {
