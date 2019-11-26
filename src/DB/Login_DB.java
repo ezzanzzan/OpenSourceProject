@@ -43,7 +43,7 @@ public class Login_DB {
 				// 로그인 한 아이디 확인
 				stmt.executeUpdate("update test1_1 set login='login' where id='" + loginid +"'" );
 
-				new Book_Frame();
+				new Select_Frame();
 			}
 
 			// 로그인 시 학번과 비밀번호가 일치하지 않을 때
