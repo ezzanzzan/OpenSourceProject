@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import DB.Book_DB;
 
-public class Book_Frame extends JFrame {
+public class BookRental_Frame extends JFrame {
 
 	public static DefaultTableModel model;
 	private JPanel panel;
@@ -42,7 +42,7 @@ public class Book_Frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Book_Frame() {
+	public BookRental_Frame() {
 		setTitle("전공책 대여 사업 프로그램");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,7 +128,6 @@ public class Book_Frame extends JFrame {
 		// 대여 버튼을 누르면 발생하는 이벤트
 		rental_B.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent e)  {
-				
 				
 				// 대여할 전공책 선택
 				String selectBook[] = Book_DB.getTableData(table);
