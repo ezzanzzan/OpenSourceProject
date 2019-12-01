@@ -1,47 +1,349 @@
 package DB;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import Bean.*;
 import Frame.*;
 
-import java.sql.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-
 public class Book_DB {
+
+	private Statement stmt = null;
+	public static boolean a=false;
+
 
 	// 테이블 초기화 작업을 하는 메소드
 	public static void PrintBook(JTable table) {	
+
 		Connection conn=null;
 		Statement stmt =null;
+
+		if(a==false) {
+			try  {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("select * from test1_2;");
+
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				String name, writer, publisher, code, forrent;
+
+				while (rs.next())  {
+					name = rs.getString("name");
+					writer = rs.getString("writer");
+					publisher = rs.getString("publisher");
+					code = rs.getString("code");
+					forrent = rs.getString("forrent");
+
+					Book.list.add(new Book(name, writer, publisher, code, forrent));
+					String str[] = {name, writer, publisher, code, forrent};
+
+					model.addRow(str);   
+				}
+
+				rs = stmt.executeQuery("select * from test1_1;");
+
+				while (rs.next())  {
+					Member.list.add(new Member(rs.getString("id"), rs.getString("name"), rs.getString("pw"),rs.getString("phone"), rs.getString("rent1"), rs.getString("rent2"), rs.getString("rent3")));
+				}
+
+				a=true;
+			}
+			catch (ClassNotFoundException cnfe)  {
+				System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
+			}
+			catch (SQLException se)  {
+				System.out.println(se.getMessage());
+			}
+			finally  {
+				try  {
+					stmt.close();
+				}
+				catch (Exception e)  {
+				}
+				try  {
+					conn.close();
+				}
+				catch (Exception e)  {
+				}
+			}
+		}
+	}
+
+	// 책 반납 버튼 실행 시 회원이 대여한 책만 출력하는 메소드
+	public static void rentalListAddRow (DefaultTableModel model)  { 
+
+		Remove_Data(model);
+
+		Connection conn=null;
+		Statement stmt=null;
+
+		String rent1=null;
+		String rent2=null;
+		String rent3=null;
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
+			stmt = (Statement) conn.createStatement();
+			ResultSet rs=stmt.executeQuery("select rent1,rent2,rent3 from test1_1 where login = 'login'");
+
+			while(rs.next()) {
+				rent1=rs.getString("rent1");
+				rent2=rs.getString("rent2");
+				rent3=rs.getString("rent3");
+			}
+
+			// 대여한 책이 없을경우
+			if(rent1==null&&rent2==null&&rent3==null) {
+				JOptionPane.showMessageDialog(null,"반납할 책이 없습니다.");
+			}
+
+			else {
+				for (Book obj : Book.list)  {
+					String s=obj.getTitle()+"("+obj.getCode()+")";
+					if (s.equals(rent1)&&obj.getForrent().equals("대여중"))  {
+						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
+						model.addRow(data);
+					} 
+					if (s.equals(rent2)&&obj.getForrent().equals("대여중"))  {
+						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
+						model.addRow(data);
+					} 					
+					if (s.equals(rent3)&&obj.getForrent().equals("대여중"))  {
+						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
+						model.addRow(data);
+					} 
+				}}
+
+		}
+		catch(ClassNotFoundException cnfe){
+			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
+		}
+
+		catch(SQLException se){
+			System.out.println(se.getMessage());
+		}
+
+		try{
+
+			conn.close();
+		}
+		catch(SQLException ee){
+			System.out.println(ee.getMessage());
+		}
+
+
+	}
+
+
+	// DB에 도서저장하는 메소드
+	public static void bookSave_DB (String str1, String str2, String str3, String str4)  
+	{  
+		Connection conn = null;
+		Statement stmt = null;
+
+		// 도서 입력이 완벽하게 되지 않았을 경우
+		if (str1.equals("") || str2.equals("") || str3.equals("") || str4.equals(""))  {
+			JOptionPane.showMessageDialog(null,"등록할 도서 정보를 입력해주세요.");
+			return;
+		}
+
 
 		try  {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from test1_2;");
 
-			DefaultTableModel model = (DefaultTableModel) table.getModel();
-			String name, writer, publisher, code, forrent;
+			ResultSet rs = stmt.executeQuery("select code from test1_2 where code = '" + str4 + "';");
 
-			while (rs.next())  {
-				name = rs.getString("name");
-				writer = rs.getString("writer");
-				publisher = rs.getString("publisher");
-				code = rs.getString("code");
-				forrent = rs.getString("forrent");
+			// 입력된 코드 일 경우
+			if (rs.next())  
+			{
+				int rowNum = stmt.executeUpdate("update test1_2 set name:='" + str1 + "', writer:='" + str2 + "', publisher:='" + str3 + "' where code='" + str4 + "';");
 
-				Book.list.add(new Book(name, writer, publisher, code, forrent));
-				String str[] = {name, writer, publisher, code, forrent};
+				// 자료구조에 책 추가 갱신작업
+				for (Book obj : Book.list)  {
+					if (obj.getCode().equals(str4))  {
+						obj.setTitle(str1);
+						obj.setWriter(str2);
+						obj.setPublisher(str3);
+						break;
+					}
+				}
 
-				model.addRow(str);   
+				int rowCount = AdminBook_Frame.getModel().getRowCount(); // 도서 테이블 화면 도서변경정보 갱신
+				for (int cnt = 0; cnt < rowCount; cnt++)  {
+					if (str4.equals(AdminBook_Frame.getModel().getValueAt(cnt, 3)))  {
+						AdminBook_Frame.getModel().setValueAt(str1, cnt, 0);
+						AdminBook_Frame.getModel().setValueAt(str2, cnt, 1);
+						AdminBook_Frame.getModel().setValueAt(str3, cnt, 2);
+						break;
+					}
+				}
+
+				JOptionPane.showMessageDialog(null,str4+"의 도서 정보가 수정되었습니다.");
+				return;
 			}
 
-			rs = stmt.executeQuery("select * from test1_1;");
-
-			while (rs.next())  {
-				Member.list.add(new Member(rs.getString("id"), rs.getString("name"), rs.getString("pw"),rs.getString("phone"), rs.getString("rent1"), rs.getString("rent2"), rs.getString("rent3")));
+			// 새로운 책 추가
+			else  {
+				String queryLang = "insert into test1_2 (name, writer, publisher, code, forrent) values('" + str1 + "', '" + str2 + "', '" + str3 + "', '" + str4 + "', '대여가능');";
+				int rowNum = stmt.executeUpdate(queryLang);
+				JOptionPane.showMessageDialog(null,"새로운 도서가 등록되었습니다.");
 			}
+
+			Book.list.add(new Book(str1, str2, str3, str4, "대여가능"));
+			String rowData[] = {str1, str2, str3, str4, "대여가능"};
+			AdminBook_Frame.getModel().addRow(rowData);
+		}
+		catch (ClassNotFoundException cnfe)  {
+			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
+		}
+		catch (SQLException se)  {
+			System.out.println(se.getMessage());
+		}
+		finally  {
+			try  {
+				stmt.close();
+			}
+			catch (Exception a)  {
+			}
+			try  {
+				conn.close();
+			}
+			catch (Exception a)  {
+			}
+		}
+	}
+
+	// DB에 저장되어 있는 도서 삭제 메소드
+	public static void bookDelete_DB (String selectBook[])  {
+
+		Connection conn = null;
+		Statement stmt = null;
+		try  {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
+			stmt = conn.createStatement();
+
+			// 학생 대여 취소
+			String s=selectBook[0]+"("+selectBook[3]+")";
+			String rent=null;
+			String id=null;
+
+			ResultSet rs=stmt.executeQuery("select id,rent1 from test1_1 where rent1='"+s+"';");
+			while(rs.next()) {
+				id=rs.getString("id");
+				rent=rs.getString("rent1");	}
+			if(rent!=null) {
+				stmt.executeUpdate("update test1_1 set rent1=null where id = '" + id + "';");
+			}
+
+			rent=null;
+			rs=stmt.executeQuery("select id,rent2 from test1_1 where rent2='"+s+"';");
+			while(rs.next()) {
+				id=rs.getString("id");
+				rent=rs.getString("rent2");	}
+			if(rent!=null) {
+				stmt.executeUpdate("update test1_1 set rent2=null where id = '" + id + "';");
+			}
+
+			rent=null;
+			rs=stmt.executeQuery("select id,rent3 from test1_1 where rent3='"+s+"';");
+			while(rs.next()) {
+				id=rs.getString("id");
+				rent=rs.getString("rent3");	}
+			if(rent!=null) {
+				stmt.executeUpdate("update test1_1 set rent3=null where id = '" + id + "';");
+			}
+
+			rs = stmt.executeQuery("select name from test1_2 where code = '" + selectBook[3] + "';");
+
+			// DB 도서 삭제
+			String queryLang = "delete from test1_2 where code = '" + selectBook[3] + "';";
+
+			int rowNum = stmt.executeUpdate(queryLang);
+			JOptionPane.showMessageDialog(null,selectBook[3]+"의 책이 삭제완료되었습니다.");
+
+			// 자료구조에 저장되어 있는 도서 데이터 삭제
+			for (int cnt = 0; cnt < Book.list.size(); cnt++)  { 
+				Book obj = Book.list.get(cnt);
+				if (obj.getCode().equals(selectBook[3]))  {
+					Book.list.remove(cnt);
+					break;
+				}
+			}
+
+			// 삭제한 도서와 같은 테이블 튜플삭제
+			int rowCount = AdminBook_Frame.getModel().getRowCount(); 
+			for (int cnt = 0; cnt < rowCount; cnt++)  {
+				if (AdminBook_Frame.getModel().getValueAt(cnt, 3).equals(selectBook[3]))
+					AdminBook_Frame.getModel().removeRow(cnt);
+			}
+
+
+		}
+		catch (ClassNotFoundException cnfe)  {
+			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
+		}
+		catch (SQLException se)  {
+			System.out.println(se.getMessage());
+		}
+		finally  {
+			try  {
+				stmt.close();
+			}
+			catch (Exception e)  {   
+			}
+			try  {
+				conn.close();
+			}
+			catch (Exception e)  {      
+			}
+		}
+	}
+
+	// DB에 저장되어 있는 회원정보 삭제 메소드
+	public static void memberDelete_DB (String selectMember[])  { 
+
+		Connection conn = null;
+		Statement stmt = null;
+		try  {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
+			stmt = conn.createStatement();
+
+			ResultSet rs = stmt.executeQuery("select name from test1_1 where id = '" + selectMember[0] + "';");
+
+			String queryLang = "delete from test1_1 where id = '" + selectMember[0] + "';";
+			int rowNum = stmt.executeUpdate(queryLang);
+			JOptionPane.showMessageDialog(null,selectMember[0]+"의 학생이 삭제되었습니다.");
+
+			// 자료구조에 저장되어 있는 회원 데이터 삭제
+			for (int cnt = 0; cnt < Member.list.size(); cnt++)  { 
+				Member obj = Member.list.get(cnt);
+				if (obj.getId().equals(selectMember[0]))  {
+					Member.list.remove(cnt);
+					break;
+				}
+			}   
+
+			// 삭제한 회원와 같은 테이블 튜플삭제
+			int rowCount = AdminMember_Frame.getModel().getRowCount(); 
+			for (int cnt = 0; cnt < rowCount; cnt++)  {
+				if (AdminMember_Frame.getModel().getValueAt(cnt, 0).equals(selectMember[0]))
+					AdminMember_Frame.getModel().removeRow(cnt);
+			}
+
 		}
 		catch (ClassNotFoundException cnfe)  {
 			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
@@ -63,7 +365,7 @@ public class Book_DB {
 		}
 	}
 
-	// 선택된 테이블 데이터 가져오는 메소드
+	// 책 선택된 테이블 데이터 가져오는 메소드
 	public static String[] getTableData (JTable table)  { 
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		int rowNum = table.getSelectedRow();
@@ -73,7 +375,7 @@ public class Book_DB {
 		String tableData[] = new String[colCount];
 		for (int cnt = 0; cnt < colCount; cnt++)  {
 			Object obj = model.getValueAt(rowNum, cnt);
-			tableData[cnt] = obj.toString();
+			tableData[cnt] = String.valueOf(obj);
 		}
 		return tableData;
 	}
@@ -168,14 +470,16 @@ public class Book_DB {
 				stmt.executeUpdate("update test1_1 set rent3:= '" + selectBook[0] + "(" + selectBook[3] + ")' where id = '" + id + "';");
 			}
 
-			for (Book obj : Book.list)  { // 자료구조에 있는 도서데이터 '대여중'으로 갱신작업
+			// 자료구조에 있는 도서데이터 '대여중'으로 갱신작업
+			for (Book obj : Book.list)  {
 				if (obj.getCode().equals(selectBook[3]))  {
 					obj.setForrent("대여중");
 					break;
 				}
 			}
 
-			for (Member obj : Member.list)  { // 자료구조에 있는 회원데이터에 대여한 책 추가하는 메소드
+			// 자료구조에 있는 회원데이터에 대여한 책 추가하는 갱신작업
+			for (Member obj : Member.list)  { 
 				if (obj.getId().equals(id))  {
 					if (obj.rentBook[0] == null)
 						obj.rentBook[0] = selectBook[0] + "(" + selectBook[3] + ")";
@@ -214,8 +518,7 @@ public class Book_DB {
 		}
 	}
 
-
-	// 검색 메소드
+	// 책 검색 메소드
 	public static void rentalBookIndex (String title, String writer, String publisher, JTable table)  { // 도서 검색기능 메소드
 		if (title.equals("") && writer.equals("") && publisher.equals(""))  {
 			System.out.println("검색조건을 한개 이상 입력해주세요");
@@ -325,7 +628,7 @@ public class Book_DB {
 		}   
 	}
 
-	// 코드 검색 메소드
+	// 책 코드 검색 메소드
 	public static void rentalBookIndex (String codeStr, DefaultTableModel model)  { // 코드로 도서검색 메소드
 		int cnt = 0;
 		for (Book obj : Book.list)  {
@@ -340,80 +643,10 @@ public class Book_DB {
 		}
 	}
 
-	// 테이블의 모든 튜플 삭제 메소드
-	public static void Remove_Data (DefaultTableModel model)  { 
-		int rowCount = model.getRowCount();
-		for (int cnt = 0; cnt < rowCount; cnt++)  {
-			model.removeRow(0);
-		}
-	}
-
-	// 책 반납 버튼 실행 시 회원이 대여한 책만 출력하는 메소드
-	public static void rentalListAddRow (DefaultTableModel model)  { 
-
-		Remove_Data(model);
-		Connection conn=null;
-		Statement stmt=null;
-
-		String rent1=null;
-		String rent2=null;
-		String rent3=null;
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
-			stmt = (Statement) conn.createStatement();
-			ResultSet rs=stmt.executeQuery("select rent1,rent2,rent3 from test1_1 where login = 'login'");
-
-			while(rs.next()) {
-				rent1=rs.getString("rent1");
-				rent2=rs.getString("rent2");
-				rent3=rs.getString("rent3");
-			}
-
-			// 대여한 책이 없을경우
-			if(rent1==null&&rent2==null&&rent3==null) {
-				JOptionPane.showMessageDialog(null,"반납할 책이 없습니다.");
-			}
-
-			else {
-				for (Book obj : Book.list)  {
-					String s=obj.getTitle()+"("+obj.getCode()+")";
-					if (s.equals(rent1)&&obj.getForrent().equals("대여중"))  {
-						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
-						model.addRow(data);
-					} 
-					if (s.equals(rent2)&&obj.getForrent().equals("대여중"))  {
-						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
-						model.addRow(data);
-					} 					
-					if (s.equals(rent3)&&obj.getForrent().equals("대여중"))  {
-						String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
-						model.addRow(data);
-					} 
-				}}
-
-		}
-		catch(ClassNotFoundException cnfe){
-			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
-		}
-
-		catch(SQLException se){
-			System.out.println(se.getMessage());
-		}
-
-		try{
-
-			conn.close();
-		}
-		catch(SQLException ee){
-			System.out.println(ee.getMessage());
-		}
 
 
-	}
 
-	// 반납 처리하는 메소드
+	// 책 반납 처리하는 메소드
 	public static void return_DB (String selectBook[])  {
 
 		Connection conn = null;
@@ -488,7 +721,42 @@ public class Book_DB {
 
 	}
 
+	// 테이블의 모든 튜플 삭제 메소드
+	public static void Remove_Data (DefaultTableModel model)  { 
+		int rowCount = model.getRowCount();
+		for (int cnt = 0; cnt < rowCount; cnt++)  {
+			model.removeRow(0);
+		}
+	}
 
+	// 대여중인 도서데이터만 테이블 튜플에 추가하는 메소드
+	public static void rentalListAddRowA (DefaultTableModel model)  { 
+		Remove_Data(model);
+		for (Book obj : Book.list)  {
+			if (obj.getForrent().equals("대여중"))  {
+				String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
+				model.addRow(data);
+			}   
+		}
+	}
+
+	// 모든 도서 데이터 테이블 튜플에 추가하는 메소드
+	public static void allBookDataAddRow (DefaultTableModel model)  {
+		Remove_Data(model);
+		for (Book obj : Book.list)  {
+			String data[] = {obj.getTitle(), obj.getWriter(), obj.getPublisher(), obj.getCode(), obj.getForrent()};
+			model.addRow(data);
+		}
+	}
+
+	// 모든 회원 데이터 테이블 튜플에 추가하는 메소드
+	public static void allMemberDataAddRow (DefaultTableModel model)  {
+		Remove_Data(model);
+		for (Member obj : Member.list)  {
+			String data[] = {obj.getId(), obj.getPw(), obj.getName(), obj.getPhone(), obj.rentBook[0], obj.rentBook[1], obj.rentBook[2]};
+			model.addRow(data);
+		}
+	}
 
 }
 

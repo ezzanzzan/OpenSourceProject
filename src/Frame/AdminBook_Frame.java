@@ -1,6 +1,6 @@
 package Frame;
 
-import DB.*;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
@@ -17,14 +17,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import DB.Book_DB;
+import DB.*;
 
-public class BookReturn_Frame extends JFrame {
+public class AdminBook_Frame extends JFrame {
 
-	public static DefaultTableModel model;
-	private JPanel panel;
+	static DefaultTableModel model;
 
 	/**
 	 * Launch the application.
@@ -34,6 +34,7 @@ public class BookReturn_Frame extends JFrame {
 			public void run() {
 				try {
 
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,10 +42,13 @@ public class BookReturn_Frame extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public BookReturn_Frame() {
+	public static DefaultTableModel getModel() {
+		return model;
+	}
+	
+	public AdminBook_Frame() {
+		
+		// 화면 gui
 		setTitle("전공책 대여 사업 프로그램");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,8 +58,9 @@ public class BookReturn_Frame extends JFrame {
 		setResizable(false);
 
 		setVisible(true);
-		
+
 		Container contentPane = getContentPane();
+		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1394, 100);
 		panel.setLayout(null);
@@ -63,7 +68,7 @@ public class BookReturn_Frame extends JFrame {
 		JPanel panel2 = new JPanel();
 		panel2.setBounds(0, 771, 1394, 100);
 		panel2.setLayout(null);
-		
+
 		JTextField title = new JTextField(11);
 		title.setBounds(80, 30, 240, 45);
 		title.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
@@ -76,15 +81,58 @@ public class BookReturn_Frame extends JFrame {
 		JTextField code = new JTextField(4);
 		code.setBounds(990, 30, 200, 45);
 		code.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-
-		// 검색 버튼 생성 및 클릭 시 이벤트
 		JButton Search_B = new JButton("검색");
 		Search_B.setForeground(Color.WHITE);
 		Search_B.setBackground(Color.DARK_GRAY);
 		Search_B.setBounds(1230, 30, 125, 45);
 		Search_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		
 		getContentPane().setLayout(null);
+
+		// 버튼 gui
+		JButton rentalList_B = new JButton("대여리스트");
+		rentalList_B.setBackground(Color.DARK_GRAY);
+		rentalList_B.setForeground(Color.WHITE);
+		rentalList_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+		rentalList_B.setBounds(109, 25, 165, 50);
+		panel.add(rentalList_B);
+		
+		JButton allList_B = new JButton("전체리스트");
+		allList_B.setForeground(Color.WHITE);
+		allList_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+		allList_B.setBackground(Color.DARK_GRAY);
+		allList_B.setBounds(335, 25, 165, 50);
+		panel.add(allList_B);
+		
+		JButton addBook_B = new JButton("도서 추가");
+		addBook_B.setBounds(766, 25, 165, 50);
+		addBook_B.setForeground(Color.WHITE);
+		addBook_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+		addBook_B.setBackground(Color.DARK_GRAY);
+		panel.add(addBook_B);
+		
+		JButton deleteBook_B = new JButton("도서 삭제");
+		deleteBook_B.setBounds(981, 25, 164, 50);
+		deleteBook_B.setForeground(Color.WHITE);
+		deleteBook_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+		deleteBook_B.setBackground(Color.DARK_GRAY);
+		panel.add(deleteBook_B);
+
+		// 홈 버튼 클릭 시 이벤트
+		JButton button = new JButton("");
+		button.setBounds(1314, 15, 68, 65);
+		panel.add(button);
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\house (1).png"));
+		button.setBorderPainted(false);			// 테두리 제거
+		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
+		button.setFocusPainted(false);			// 선택 되었을 때 테두리 사용 안함
+		button.setOpaque(false);
+		button.addActionListener(new ActionListener()  {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				new Login_Frame();
+			}
+		});
+		
 		contentPane.add(panel);
 
 		JLabel label = new JLabel("제목");
@@ -117,44 +165,56 @@ public class BookReturn_Frame extends JFrame {
 		table.setBackground(Color.WHITE);
 		table.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
 		table.setRowHeight(40);
-		BookReturn_Frame.model = model;
+		this.model = model;
 
 		Book_DB.PrintBook(table);
-		Book_DB.rentalListAddRow(model);		
+		Book_DB.allBookDataAddRow(model);
 		JScrollPane scrollPane = new JScrollPane(table);
-
 		scrollPane.setBounds(0, 100, 1394, 672);
 		contentPane.add(scrollPane);
 		
-		// 반납하기 버튼 생성 및 클릭시 이벤트
-		JButton return_B = new JButton("반납하기");
-		return_B.setBackground(Color.DARK_GRAY);
-		return_B.setForeground(Color.WHITE);
-		return_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		return_B.setBounds(600, 25, 200, 50);
-		panel.add(return_B);
-		
-		return_B.addActionListener(new ActionListener()  {
+		// 도서 추가 버튼 클릭 시 이벤트
+		addBook_B.addActionListener(new ActionListener()  {
+			public void actionPerformed(ActionEvent e) {
+				new AddBook_Frame();
+			}
+		});
+
+		// 도서 삭제 버튼 클릭 시 이벤트
+		deleteBook_B.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e) {
 				
-				// 반납할 전공책 선택
+				// 삭제 할 도서 선택
 				String selectBook[] = Book_DB.getTableData(table);
 				
 				if (selectBook == null)  {
 					JOptionPane.showMessageDialog(null,"도서를 선택해주세요.");
 					return;
 				}
-				else if (selectBook[4].equals("대여가능"))  {
-					JOptionPane.showMessageDialog(null,"이미 반납 된 책입니다.");
-					return;
+				else
+				{
+					Book_DB.bookDelete_DB(selectBook);
 				}
-				Book_DB.return_DB(selectBook);
+			}
+		});
+		
+		// 대여 리스트 버튼 클릭 시 이벤트
+		rentalList_B.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Book_DB.rentalListAddRowA(model);
+			}
+		});
+
+		// 전체 리스트 버튼 클릭 시 이벤트
+		allList_B.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Book_DB.allBookDataAddRow(model);
 			}
 		});
 		
 		// 검색 버튼 클릭 시 이벤트
 		Search_B.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e)  {
+			public void actionPerformed(ActionEvent e) {
 				String titleStr = title.getText();
 				String writerStr = writer.getText();
 				String publisherStr = publisher.getText();
@@ -172,28 +232,7 @@ public class BookReturn_Frame extends JFrame {
 				}
 				Book_DB.Remove_Data(model);
 				Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
-				
 			}
 		});
-		
-		// 뒤로가기 버튼 클릭 시 이벤트
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back (3).png"));
-		button.setBounds(1300, 17, 68, 65);
-		button.setBorderPainted(false);			// 테두리 제거
-		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
-		button.setFocusPainted(false);			// 선택 되었을 때 테두리 사용 안함
-		button.setOpaque(false);				// 투명하게
-		panel.add(button);
-
-
-		button.addActionListener(new ActionListener()  {
-			public void actionPerformed(ActionEvent e) {
-				new SelectStudent_Frame();
-				setVisible(false);
-			}
-			});
-		
 	}
-
 }
