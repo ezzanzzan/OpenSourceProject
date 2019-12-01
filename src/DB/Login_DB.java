@@ -130,5 +130,40 @@ public class Login_DB {
 			System.out.println(ee.getMessage());
 		}
 	}
+	
+	public static void reset() {
+
+		Connection conn = null;
+		Statement stmt = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test1?characterEncoding=UTF-8&serverTimezone=UTC","root","1234");
+			stmt = (Statement) conn.createStatement();
+
+			// 로그인 확인 삭제
+			stmt.executeUpdate("update test1_1 set login = null ");
+
+			String queryLang = "delete from test1_3 where setadmin='set';";
+			int rowNum = stmt.executeUpdate(queryLang);
+		}
+		catch(ClassNotFoundException cnfe){
+			System.out.println("해당 클래스를 찾을 수 없습니다." + cnfe.getMessage());
+		}
+
+		catch(SQLException se){
+			System.out.println(se.getMessage());
+		}
+
+		try{
+
+			conn.close();
+		}
+		catch(SQLException ee){
+			System.out.println(ee.getMessage());
+		}
+
+
+	}
 
 }
