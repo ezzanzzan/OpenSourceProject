@@ -9,7 +9,7 @@ public class Member {
 	private String name;	// 이름
 	private String pw;		// 비밀번호
 	private String phone;	// 전화번호
-	public String login;		// 로그인 선택
+	public String login;	// 로그인 선택
 	
 	public String rentBook[]=new String[3];
 	

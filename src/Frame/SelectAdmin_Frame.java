@@ -1,5 +1,6 @@
 package Frame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -10,8 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-public class Select_Frame extends JFrame {
+public class SelectAdmin_Frame extends JFrame {
 
 	private JPanel panel;
 
@@ -33,7 +35,7 @@ public class Select_Frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Select_Frame() {
+	public SelectAdmin_Frame() {
 		setTitle("전공책 대여 사업 프로그램");
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,46 +43,49 @@ public class Select_Frame extends JFrame {
 		setSize(800,600);						
 		setLocationRelativeTo(null);		
 		setResizable(false);	
-		
+
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(null);
-		
+
 		JLabel Title=new JLabel("◆◇ DRAG 전공책 대여 사업 프로그램입니다 ◇◆");
 		Title.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
 		Title.setBounds(152,77,510,41);
 		panel.add(Title);
-		
-		JButton rental_B = new JButton("대여");
-		rental_B.setForeground(Color.BLACK);
-		rental_B.setBackground(Color.WHITE);
-		rental_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		rental_B.setBounds(208, 230, 160, 160);
-		panel.add(rental_B);
-		
-		// 대여 버튼을 클릭 시 발생하는 이벤트
-		rental_B.addActionListener(new ActionListener() {
+
+		JButton student_B = new JButton("학생 관리");
+		student_B.setForeground(Color.BLACK);
+		student_B.setBackground(Color.WHITE);
+		student_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
+		student_B.setBounds(208, 230, 160, 160);
+		panel.add(student_B);
+
+		// 학생 관리 버튼을 클릭 시 발생하는 이벤트
+		student_B.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new BookRental_Frame();
+				new AdminMember_Frame();
+				setVisible(false);
 			}
 		});
-		
-		
-		JButton return_B = new JButton("반납");
-		return_B.setForeground(Color.BLACK);
-		return_B.setBackground(Color.WHITE);
-		return_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		return_B.setBounds(438, 230, 160, 160);
-		panel.add(return_B);
-		
-		return_B.addActionListener(new ActionListener(){
+
+		JButton book_B = new JButton("도서 관리");
+		book_B.setForeground(Color.BLACK);
+		book_B.setBackground(Color.WHITE);
+		book_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
+		book_B.setBounds(438, 230, 160, 160);
+		panel.add(book_B);
+
+		// 도서 관리 버튼을 클릭 시 발생하는 이벤트
+		book_B.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				new BookReturn_Frame();
+				new AdminBook_Frame();
+				setVisible(false);
 			}
 		});
 
 		setContentPane(panel);
 		setVisible(true);
-		
+
 	}
 }
+

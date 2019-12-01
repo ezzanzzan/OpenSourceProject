@@ -1,0 +1,15 @@
+package Bean;
+
+import Frame.Login_Frame;
+
+public class Start {
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method
+		new Login_Frame();
+	}
+
+}
+
+

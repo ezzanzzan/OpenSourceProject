@@ -22,9 +22,7 @@ public class Login_Frame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login_Frame frame = new Login_Frame();
-				
-					frame.setVisible(true);
+
 				} 
 				catch (Exception e) {
 					e.printStackTrace();
@@ -76,7 +74,7 @@ public class Login_Frame extends JFrame {
 
 		// pw text box
 		JPasswordField pw = new JPasswordField(20);
-		pw.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 20));
+		pw.setFont(new Font("굴림", Font.PLAIN, 20));
 		pw.setBackground(new Color(248, 248, 255));
 		pw.setBounds(240, 265, 370, 45);	
 		panel.add(pw);
@@ -92,8 +90,7 @@ public class Login_Frame extends JFrame {
 		login_B.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				new Login_DB(id.getText(),pw.getText());
-				
+				Login_DB.LoginS_DB(id.getText(),pw.getText());
 				setVisible(false);	
 			}
 		});
@@ -109,16 +106,26 @@ public class Login_Frame extends JFrame {
 		join_S.addActionListener(new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
 				new Join_Frame();
+				setVisible(false);
 			}
 		});
-
-		setContentPane(panel);
 		
-		JButton join_M = new JButton("\uAD00\uB9AC\uC790\uB85C \uB85C\uADF8\uC778");
+		JButton join_M = new JButton("관리자로 로그인");
 		join_M.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 20));
 		join_M.setBackground(Color.WHITE);
 		join_M.setBounds(240, 414, 370, 55);
 		panel.add(join_M);
+		
+		// 관리자로 로그인
+		join_M.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
+				Login_DB.LoginA_DB(id.getText(), pw.getText());
+			}
+		});
+
+		
+		setVisible(true);
+		setContentPane(panel);
 	}
 }
