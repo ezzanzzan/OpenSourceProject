@@ -2,11 +2,15 @@ package Frame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,24 +44,29 @@ public class SelectAdmin_Frame extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setSize(800,600);						
+		setSize(700,600);					
 		setLocationRelativeTo(null);		
 		setResizable(false);	
 
-		panel = new JPanel();
-		panel.setBackground(Color.WHITE);
+		panel = new JPanel(){
+			public void paintComponent(Graphics g) {
+				Dimension d=getSize();
+				ImageIcon image = new ImageIcon("C:\\Users\\천은정\\Desktop\\select.jpg");
+				g.drawImage(image.getImage(), 0, 0, d.width, d.height, null);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
-		JLabel Title=new JLabel("◆◇ DRAG 전공책 대여 사업 프로그램입니다 ◇◆");
-		Title.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		Title.setBounds(152,77,510,41);
-		panel.add(Title);
+		Container contentPane=getContentPane();  //배경 이미지
+		contentPane.add(panel);
 
 		JButton student_B = new JButton("학생 관리");
 		student_B.setForeground(Color.BLACK);
 		student_B.setBackground(Color.WHITE);
 		student_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		student_B.setBounds(208, 230, 160, 160);
+		student_B.setBounds(140, 300, 160, 160);
 		panel.add(student_B);
 
 		// 학생 관리 버튼을 클릭 시 발생하는 이벤트
@@ -72,7 +81,7 @@ public class SelectAdmin_Frame extends JFrame {
 		book_B.setForeground(Color.BLACK);
 		book_B.setBackground(Color.WHITE);
 		book_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		book_B.setBounds(438, 230, 160, 160);
+		book_B.setBounds(400, 300, 160, 160);
 		panel.add(book_B);
 
 		// 도서 관리 버튼을 클릭 시 발생하는 이벤트
@@ -83,7 +92,6 @@ public class SelectAdmin_Frame extends JFrame {
 			}
 		});
 
-		setContentPane(panel);
 		setVisible(true);
 
 	}

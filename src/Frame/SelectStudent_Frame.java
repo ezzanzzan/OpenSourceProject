@@ -1,15 +1,20 @@
 package Frame;
 
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 public class SelectStudent_Frame extends JFrame {
 
@@ -38,24 +43,29 @@ public class SelectStudent_Frame extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setSize(800,600);						
+		setSize(700,600);					
 		setLocationRelativeTo(null);		
 		setResizable(false);	
-		
-		panel = new JPanel();
-		panel.setBackground(Color.WHITE);
+
+		panel = new JPanel(){
+			public void paintComponent(Graphics g) {
+				Dimension d=getSize();
+				ImageIcon image = new ImageIcon("C:\\Users\\천은정\\Desktop\\select.jpg");
+				g.drawImage(image.getImage(), 0, 0, d.width, d.height, null);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
-		
-		JLabel Title=new JLabel("◆◇ DRAG 전공책 대여 사업 프로그램입니다 ◇◆");
-		Title.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		Title.setBounds(152,77,510,41);
-		panel.add(Title);
+
+		Container contentPane=getContentPane();  //배경 이미지
+		contentPane.add(panel);
 		
 		JButton rental_B = new JButton("대여");
 		rental_B.setForeground(Color.BLACK);
 		rental_B.setBackground(Color.WHITE);
 		rental_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		rental_B.setBounds(208, 230, 160, 160);
+		rental_B.setBounds(140, 300, 160, 160);
 		panel.add(rental_B);
 		
 		// 대여 버튼을 클릭 시 발생하는 이벤트
@@ -70,7 +80,7 @@ public class SelectStudent_Frame extends JFrame {
 		return_B.setForeground(Color.BLACK);
 		return_B.setBackground(Color.WHITE);
 		return_B.setFont(new Font("경기천년제목 Bold", Font.PLAIN, 25));
-		return_B.setBounds(438, 230, 160, 160);
+		return_B.setBounds(400, 300, 160, 160);
 		panel.add(return_B);
 		
 		return_B.addActionListener(new ActionListener(){
@@ -80,7 +90,6 @@ public class SelectStudent_Frame extends JFrame {
 			}
 		});
 
-		setContentPane(panel);
 		setVisible(true);
 		
 	}
