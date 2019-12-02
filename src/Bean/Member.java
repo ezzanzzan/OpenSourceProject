@@ -50,5 +50,17 @@ public class Member {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	public String getRent1()
+	{
+		return rentBook[0];
+	}
+	public String getRent2()
+	{
+		return rentBook[1];
+	}
+	public String getRent3()
+	{
+		return rentBook[2];
+	}
 	
 }

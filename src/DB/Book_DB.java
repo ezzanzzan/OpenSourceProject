@@ -144,7 +144,6 @@ public class Book_DB {
 
 	}
 
-
 	// DB에 도서저장하는 메소드
 	public static void bookSave_DB (String str1, String str2, String str3, String str4)  
 	{  
@@ -518,10 +517,10 @@ public class Book_DB {
 		}
 	}
 
-	// 책 검색 메소드
-	public static void rentalBookIndex (String title, String writer, String publisher, JTable table)  { // 도서 검색기능 메소드
+	// 도서 검색기능 메소드
+	public static void rentalBookIndex (String title, String writer, String publisher, JTable table)  { 
 		if (title.equals("") && writer.equals("") && publisher.equals(""))  {
-			System.out.println("검색조건을 한개 이상 입력해주세요");
+			JOptionPane.showMessageDialog(null,"검색 조건을 하나 이상 입력해주세요.");
 			return;
 		}
 		int size = Book.list.size();
@@ -542,7 +541,7 @@ public class Book_DB {
 				}
 			}
 			if (tempData1[0][0] == null)  {
-				System.out.println("검색한 회원정보가 없습니다.");
+				JOptionPane.showMessageDialog(null,"검색된 회원정보가 없습니다.");
 				return;
 			}
 		}
@@ -560,7 +559,7 @@ public class Book_DB {
 					}
 				}
 				if (tempData1[0][0] == null)  {
-					System.out.println("검색한 회원정보가 없습니다.");
+					JOptionPane.showMessageDialog(null,"검색된 회원정보가 없습니다.");
 					return;
 				}   
 			}
@@ -572,7 +571,7 @@ public class Book_DB {
 					}
 				}
 				if (tempData2[0][0] == null)  {
-					System.out.println("검색한 회원정보가 없습니다.");
+					JOptionPane.showMessageDialog(null,"검색된 회원정보가 없습니다.");
 					return;
 				}   
 			}
@@ -589,7 +588,7 @@ public class Book_DB {
 						}
 					}
 					if (count == 0)
-						System.out.println("검색한 도서정보가 없습니다.");
+						JOptionPane.showMessageDialog(null,"검색된 도서정보가 없습니다.");
 				}
 				else  {
 					int count = 0;
@@ -600,7 +599,7 @@ public class Book_DB {
 						}
 					}
 					if (count == 0)
-						System.out.println("검색한 회원정보가 없습니다.");
+						JOptionPane.showMessageDialog(null,"검색된 도서정보가 없습니다.");
 				}
 			}
 			else  {
@@ -628,8 +627,29 @@ public class Book_DB {
 		}   
 	}
 
-	// 책 코드 검색 메소드
-	public static void rentalBookIndex (String codeStr, DefaultTableModel model)  { // 코드로 도서검색 메소드
+	// 회원 검색기능 메소드
+	public static void rentalMemberIndex (String id, JTable table)  { 
+		if (id.equals(""))  {
+			JOptionPane.showMessageDialog(null,"검색 조건을 입력해주세요.");
+			return;
+		}
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		int cnt = 0;
+		for (Member obj : Member.list)  {
+			if (!(-1 == obj.getId().indexOf(id)))  {
+				String data[] = {obj.getId(), obj.getName(), obj.getPw(),obj.getPhone(),obj.getRent1(),obj.getRent2(),obj.getRent3()};
+				model.addRow(data);
+				cnt++;
+			}
+		}
+		if (cnt == 0)
+			JOptionPane.showMessageDialog(null,"검색결과가 없습니다.");
+
+	}
+
+
+	// 코드로 도서검색 메소드
+	public static void rentalBookIndex (String codeStr, DefaultTableModel model)  {
 		int cnt = 0;
 		for (Book obj : Book.list)  {
 			if (obj.getCode().equals(codeStr))  {
@@ -639,7 +659,7 @@ public class Book_DB {
 			}
 		}
 		if (cnt == 0)  {
-			System.out.println("검색한 도서코드가 없습니다");
+			JOptionPane.showMessageDialog(null,"검색된 도서코가 없습니다.");
 		}
 	}
 
