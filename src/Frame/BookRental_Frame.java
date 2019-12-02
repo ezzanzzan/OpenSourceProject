@@ -65,7 +65,7 @@ public class BookRental_Frame extends JFrame {
 		rental_B.setBackground(Color.DARK_GRAY);
 		rental_B.setForeground(Color.WHITE);
 		rental_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		rental_B.setBounds(600, 25, 200, 50);
+		rental_B.setBounds(781, 25, 200, 50);
 
 		JTextField title = new JTextField(11);
 		title.setBounds(80, 30, 240, 45);
@@ -104,6 +104,20 @@ public class BookRental_Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				new SelectStudent_Frame();
 				setVisible(false);
+			}
+		});
+		
+		JButton allList_B = new JButton("전체리스트");
+		allList_B.setForeground(Color.WHITE);
+		allList_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+		allList_B.setBackground(Color.DARK_GRAY);
+		allList_B.setBounds(358, 25, 200, 50);
+		panel.add(allList_B);
+		
+		// 전체 리스트 버튼 클릭 시 이벤트
+		allList_B.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Book_DB.allBookDataAddRow(model);
 			}
 		});
 

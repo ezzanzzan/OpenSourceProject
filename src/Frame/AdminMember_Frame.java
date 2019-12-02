@@ -1,6 +1,5 @@
 package Frame;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
@@ -17,10 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import DB.*;
+import DB.Book_DB;
 
 public class AdminMember_Frame extends JFrame {
 
@@ -73,13 +71,6 @@ public class AdminMember_Frame extends JFrame {
 		delete_B.setBounds(772, 25, 200, 50);
 		panel.add(delete_B);
 
-		JButton Search_B = new JButton("검색");
-		Search_B.setForeground(Color.WHITE);
-		Search_B.setBackground(Color.DARK_GRAY);
-		Search_B.setBounds(1230, 30, 125, 45);
-		Search_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel.add(Search_B);
-
 		JButton allList_B = new JButton("\uC804\uCCB4 \uB9AC\uC2A4\uD2B8");
 		allList_B.setForeground(Color.WHITE);
 		allList_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
@@ -104,23 +95,14 @@ public class AdminMember_Frame extends JFrame {
 		});
 
 		JTextField hakbun = new JTextField(11);
-		hakbun.setBounds(332, 30, 240, 45);
+		hakbun.setBounds(611, 30, 240, 45);
 		hakbun.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		JTextField name = new JTextField(4);
-		name.setBounds(797, 30, 200, 45);
-		name.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
 
 		JLabel label = new JLabel("학번");
-		label.setBounds(280, 30, 40, 45);
+		label.setBounds(559, 30, 40, 45);
 		label.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
 		panel2.add(label);
 		panel2.add(hakbun);
-		JLabel label_1 = new JLabel("이름");
-		label_1.setBounds(745, 30, 40, 45);
-		label_1.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel2.add(label_1);
-		panel2.add(name);
-		panel2.add(Search_B);
 		getContentPane().setLayout(null);
 
 		contentPane.add(panel);
@@ -140,6 +122,22 @@ public class AdminMember_Frame extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(0, 100, 1394, 672);
 		contentPane.add(scrollPane);
+
+		JButton Search_B = new JButton("검색");
+		Search_B.setBounds(1208, 30, 125, 45);
+		panel2.add(Search_B);
+		Search_B.setForeground(Color.WHITE);
+		Search_B.setBackground(Color.DARK_GRAY);
+		Search_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
+
+		// 검색 버튼 누르면 발생하는 이벤트 
+		Search_B.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent e)  {
+				String hakbunStr=hakbun.getText();
+				Book_DB.Remove_Data(model);
+				Book_DB.rentalMemberIndex(hakbunStr, table);
+			}
+		});
 
 		// 삭제 버튼을 누르면 발생하는 이벤트
 		delete_B.addActionListener(new ActionListener() {
@@ -164,13 +162,6 @@ public class AdminMember_Frame extends JFrame {
 		allList_B.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent e)  {
 				Book_DB.allMemberDataAddRow(model);
-			}
-		});
-		
-		// 검색 버튼 누르면 발생하는 이벤트 /////////////// 해야함!!!
-		Search_B.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e)  {
-				
 			}
 		});
 

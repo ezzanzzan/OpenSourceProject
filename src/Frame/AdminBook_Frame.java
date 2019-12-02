@@ -117,19 +117,20 @@ public class AdminBook_Frame extends JFrame {
 		deleteBook_B.setBackground(Color.DARK_GRAY);
 		panel.add(deleteBook_B);
 
-		// 홈 버튼 클릭 시 이벤트
+		// 뒤로 가기 버튼 클릭 시 이벤트
 		JButton button = new JButton("");
-		button.setBounds(1314, 15, 68, 65);
-		panel.add(button);
-		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\house (1).png"));
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back (3).png"));
+		button.setBounds(1300, 17, 68, 65);
 		button.setBorderPainted(false);			// 테두리 제거
 		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
 		button.setFocusPainted(false);			// 선택 되었을 때 테두리 사용 안함
-		button.setOpaque(false);
+		button.setOpaque(false);				// 투명하게
+		panel.add(button);
+
 		button.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new Login_Frame();
+				new SelectAdmin_Frame();
 			}
 		});
 		
@@ -214,24 +215,27 @@ public class AdminBook_Frame extends JFrame {
 		
 		// 검색 버튼 클릭 시 이벤트
 		Search_B.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed (ActionEvent e)  {
 				String titleStr = title.getText();
 				String writerStr = writer.getText();
 				String publisherStr = publisher.getText();
 				String codeStr = code.getText();
-				if (titleStr.equals("") && writerStr.equals("") && publisherStr.equals(""))  {
-					if (!codeStr.equals(""))  {
+				if (titleStr.equals("") && writerStr.equals("") && publisherStr.equals("")&&codeStr.equals(""))  {
+					JOptionPane.showMessageDialog(null,"검색 조건을 하나 이상 입력해주세요.");
+					return;
+				}
+				else  {
+					if (!codeStr.equals(""))  {		// 코드 검색
 						Book_DB.Remove_Data(model);
 						Book_DB.rentalBookIndex(codeStr, model);
 						return;
 					}	
-					else  {
-						System.out.println("검색조건을 한개 이상 입력해주세요");
-						return;
+					else {		// 도서, 저자, 출판사 검색
+						Book_DB.Remove_Data(model);
+						Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
 					}
 				}
-				Book_DB.Remove_Data(model);
-				Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
+				
 			}
 		});
 	}

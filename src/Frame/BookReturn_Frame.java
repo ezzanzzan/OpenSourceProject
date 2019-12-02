@@ -159,19 +159,21 @@ public class BookReturn_Frame extends JFrame {
 				String writerStr = writer.getText();
 				String publisherStr = publisher.getText();
 				String codeStr = code.getText();
-				if (titleStr.equals("") && writerStr.equals("") && publisherStr.equals(""))  {
-					if (!codeStr.equals(""))  {
+				if (titleStr.equals("") && writerStr.equals("") && publisherStr.equals("")&&codeStr.equals(""))  {
+					JOptionPane.showMessageDialog(null,"검색 조건을 하나 이상 입력해주세요.");
+					return;
+				}
+				else  {
+					if (!codeStr.equals(""))  {		// 코드 검색
 						Book_DB.Remove_Data(model);
 						Book_DB.rentalBookIndex(codeStr, model);
 						return;
 					}	
-					else  {
-						System.out.println("검색조건을 한개 이상 입력해주세요");
-						return;
+					else {		// 도서, 저자, 출판사 검색
+						Book_DB.Remove_Data(model);
+						Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
 					}
 				}
-				Book_DB.Remove_Data(model);
-				Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
 				
 			}
 		});

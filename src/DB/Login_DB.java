@@ -38,19 +38,20 @@ public class Login_DB {
 				pw=rs.getString("pw");
 			}
 
-			if(pw.equals(loginpw)) {
+			if(loginpw.equals(pw)) {
 
 				JOptionPane.showMessageDialog(null,"로그인이 완료되었습니다.");
 
 				// 로그인 한 아이디 확인
 				stmt.executeUpdate("update test1_1 set login='login' where id='" + loginid +"'" );
-
 				new SelectStudent_Frame();
 			}
 
 			// 로그인 시 학번과 비밀번호가 일치하지 않을 때
-			else
+			else {
 				JOptionPane.showMessageDialog(null,"학번이나 비밀번호를 잘못 입력하셨습니다.");
+				new Login_Frame();
+			}
 
 
 		}
@@ -109,8 +110,10 @@ public class Login_DB {
 				}
 
 				// 로그인 시 id,pw가 일치하지 않을 때
-				else
+				else {
 					JOptionPane.showMessageDialog(null,"잘못 입력하셨습니다.");
+					new Login_Frame();
+				}
 			}
 
 		}

@@ -107,7 +107,7 @@ public class Login_Frame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				Login_DB.LoginS_DB(id.getText(),pw.getText());
-				setVisible(false);	
+				setVisible(false);
 			}
 		});
 
