@@ -91,7 +91,7 @@ public class BookRental_Frame extends JFrame {
 		contentPane.add(panel);
 
 		JButton button = new JButton("");
-		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back (3).png"));
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back-arrow.png"));
 		button.setBounds(1300, 17, 68, 65);
 		button.setBorderPainted(false);			// 테두리 제거
 		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
@@ -148,6 +148,7 @@ public class BookRental_Frame extends JFrame {
 		DefaultTableModel model = new DefaultTableModel(columNames, 0);
 
 		JTable table = new JTable(model);
+		
 		table.setBackground(Color.WHITE);
 		table.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
 		table.setRowHeight(40);
