@@ -773,7 +773,7 @@ public class Book_DB {
 	public static void allMemberDataAddRow (DefaultTableModel model)  {
 		Remove_Data(model);
 		for (Member obj : Member.list)  {
-			String data[] = {obj.getId(), obj.getPw(), obj.getName(), obj.getPhone(), obj.rentBook[0], obj.rentBook[1], obj.rentBook[2]};
+			String data[] = {obj.getId(), obj.getName(), obj.getPw(), obj.getPhone(), obj.rentBook[0], obj.rentBook[1], obj.rentBook[2]};
 			model.addRow(data);
 		}
 	}

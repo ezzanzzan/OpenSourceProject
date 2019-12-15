@@ -89,6 +89,23 @@ public class SelectStudent_Frame extends JFrame {
 				setVisible(false);
 			}
 		});
+		
+		JButton button = new JButton("");
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back-arrow.png"));
+		button.setBounds(45, 39, 68, 65);
+		button.setBorderPainted(false);			// 테두리 제거
+		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
+		button.setFocusPainted(false);			// 선택 되었을 때 테두리 사용 안함
+		button.setOpaque(false);				// 투명하게
+		panel.add(button);
+
+		button.addActionListener(new ActionListener()  {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				new Login_Frame();
+			}
+		});
+
 
 		setVisible(true);
 		

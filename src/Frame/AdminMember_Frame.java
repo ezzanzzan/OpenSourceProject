@@ -79,7 +79,7 @@ public class AdminMember_Frame extends JFrame {
 		panel.add(allList_B);
 
 		JButton button = new JButton("");
-		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back (3).png"));
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back-arrow.png"));
 		button.setBounds(1300, 17, 68, 65);
 		button.setBorderPainted(false);			// 테두리 제거
 		button.setContentAreaFilled(false);		// 내용영역 채우기 없음

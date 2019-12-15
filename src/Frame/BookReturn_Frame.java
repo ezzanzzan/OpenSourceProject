@@ -60,55 +60,8 @@ public class BookReturn_Frame extends JFrame {
 		panel.setBounds(0, 0, 1394, 100);
 		panel.setLayout(null);
 		
-		JPanel panel2 = new JPanel();
-		panel2.setBounds(0, 771, 1394, 100);
-		panel2.setLayout(null);
-		
-		JTextField title = new JTextField(11);
-		title.setBounds(80, 30, 240, 45);
-		title.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		JTextField writer = new JTextField(4);
-		writer.setBounds(390, 30, 200, 45);
-		writer.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		JTextField publisher = new JTextField(9);
-		publisher.setBounds(680, 30, 240, 45);
-		publisher.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		JTextField code = new JTextField(4);
-		code.setBounds(990, 30, 200, 45);
-		code.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-
-		// 검색 버튼 생성 및 클릭 시 이벤트
-		JButton Search_B = new JButton("검색");
-		Search_B.setForeground(Color.WHITE);
-		Search_B.setBackground(Color.DARK_GRAY);
-		Search_B.setBounds(1230, 30, 125, 45);
-		Search_B.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		
 		getContentPane().setLayout(null);
 		contentPane.add(panel);
-
-		JLabel label = new JLabel("제목");
-		label.setBounds(30, 30, 40, 45);
-		label.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel2.add(label);
-		panel2.add(title);
-		JLabel label_1 = new JLabel("저자");
-		label_1.setBounds(340, 30, 40, 45);
-		label_1.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel2.add(label_1);
-		panel2.add(writer);
-		JLabel label_2 = new JLabel("출판사");
-		label_2.setBounds(610, 30, 60, 45);
-		label_2.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel2.add(label_2);
-		panel2.add(publisher);
-		panel2.add(Search_B);
-		JLabel label_3 = new JLabel("코드");
-		label_3.setBounds(940, 30, 40, 45);
-		label_3.setFont(new Font("THE외계인설명서", Font.PLAIN, 20));
-		panel2.add(label_3);
-		panel2.add(code);
-		contentPane.add(panel2);
 
 		String columNames[] = {"도서명", "저자", "출판사", "코드", "대여상태"};
 		DefaultTableModel model = new DefaultTableModel(columNames, 0);
@@ -123,7 +76,7 @@ public class BookReturn_Frame extends JFrame {
 		Book_DB.rentalListAddRow(model);		
 		JScrollPane scrollPane = new JScrollPane(table);
 
-		scrollPane.setBounds(0, 100, 1394, 672);
+		scrollPane.setBounds(0, 100, 1394, 771);
 		contentPane.add(scrollPane);
 		
 		// 반납하기 버튼 생성 및 클릭시 이벤트
@@ -152,35 +105,9 @@ public class BookReturn_Frame extends JFrame {
 			}
 		});
 		
-		// 검색 버튼 클릭 시 이벤트
-		Search_B.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e)  {
-				String titleStr = title.getText();
-				String writerStr = writer.getText();
-				String publisherStr = publisher.getText();
-				String codeStr = code.getText();
-				if (titleStr.equals("") && writerStr.equals("") && publisherStr.equals("")&&codeStr.equals(""))  {
-					JOptionPane.showMessageDialog(null,"검색 조건을 하나 이상 입력해주세요.");
-					return;
-				}
-				else  {
-					if (!codeStr.equals(""))  {		// 코드 검색
-						Book_DB.Remove_Data(model);
-						Book_DB.rentalBookIndex(codeStr, model);
-						return;
-					}	
-					else {		// 도서, 저자, 출판사 검색
-						Book_DB.Remove_Data(model);
-						Book_DB.rentalBookIndex(titleStr, writerStr, publisherStr, table);
-					}
-				}
-				
-			}
-		});
-		
 		// 뒤로가기 버튼 클릭 시 이벤트
 		JButton button = new JButton("");
-		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back (3).png"));
+		button.setIcon(new ImageIcon("C:\\Users\\\uCC9C\uC740\uC815\\Downloads\\back-arrow.png"));
 		button.setBounds(1300, 17, 68, 65);
 		button.setBorderPainted(false);			// 테두리 제거
 		button.setContentAreaFilled(false);		// 내용영역 채우기 없음
